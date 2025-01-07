@@ -33,19 +33,19 @@
 </head>
 <body>
   <!-- 3D Model Viewer -->
-  <model-viewer
-    id="viewer"
-    src="./scene.glb"  
+ <model-viewer
+    src="./scene.glb"
     alt="A 3D model"
     ar
     ar-modes="scene-viewer webxr quick-look"
-    ar-placement="floor" <!-- Automatically locks model to the ground -->
+    ar-placement="floor"
     camera-controls
     environment-image="neutral"
     auto-rotate
     interaction-prompt="when-focused"
     style="width: 100%; height: 80vh; max-height: 500px;">
-  </model-viewer>
+</model-viewer>
+
 
   <!-- AR Fallback Button -->
   <button id="ar-button">Open in AR</button>
