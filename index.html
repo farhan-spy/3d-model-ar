@@ -33,19 +33,19 @@
 </head>
 <body>
   <!-- 3D Model Viewer -->
- <model-viewer
-    src="./scene.gltf"
+  <model-viewer
+    id="viewer"
+    src="./scene.glb"  
     alt="A 3D model"
     ar
     ar-modes="scene-viewer webxr quick-look"
-    ar-placement="floor"
+    ar-placement="floor" <!-- Ensure it is locked to the ground -->
     camera-controls
     environment-image="neutral"
     auto-rotate
     interaction-prompt="when-focused"
     style="width: 100%; height: 80vh; max-height: 500px;">
-</model-viewer>
-
+  </model-viewer>
 
   <!-- AR Fallback Button -->
   <button id="ar-button">Open in AR</button>
@@ -57,34 +57,30 @@
       const arButton = document.getElementById("ar-button");
       const fallbackMessage = document.getElementById("fallback-message");
 
-      // Debug: Log AR compatibility
-      console.log("Checking AR compatibility...");
-
-      // Ensure the AR support check works properly
       try {
         const isARSupported = await viewer.canActivateAR;
         if (isARSupported) {
           console.log("AR is supported on this device.");
-          arButton.style.display = "none"; // Use built-in model-viewer's AR button
+          arButton.style.display = "none"; // Hide fallback button for AR-supported devices
         } else {
           console.log("AR is not supported. Showing fallback.");
           fallbackMessage.style.display = "block";
           arButton.style.display = "block";
 
           arButton.addEventListener("click", () => {
-            // Direct link to Scene Viewer fallback
+            // Open the Scene Viewer fallback
             const sceneViewerUrl = `intent://arvr.google.com/scene-viewer/1.0?file=${window.location.origin}/scene.glb&mode=ar_only#Intent;scheme=https;package=com.google.android.googlequicksearchbox;end;`;
             window.location.href = sceneViewerUrl;
           });
         }
       } catch (error) {
         console.error("Error checking AR compatibility:", error);
-        // Show fallback in case of an error
+        // Show fallback if there's an error
         fallbackMessage.style.display = "block";
         arButton.style.display = "block";
 
         arButton.addEventListener("click", () => {
-          // Direct link to Scene Viewer fallback
+          // Open the Scene Viewer fallback
           const sceneViewerUrl = `intent://arvr.google.com/scene-viewer/1.0?file=${window.location.origin}/scene.glb&mode=ar_only#Intent;scheme=https;package=com.google.android.googlequicksearchbox;end;`;
           window.location.href = sceneViewerUrl;
         });
