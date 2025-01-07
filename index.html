@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>3D Model Viewer</title>
+  <title>3D Model Viewer with AR</title>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
@@ -14,44 +14,52 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
+      height: 100vh;
     }
-
     #fallback-message {
       display: none;
-      margin-top: 20px;
       color: #ff0000;
-      font-size: 18px;
+      margin-top: 10px;
+      font-size: 16px;
     }
   </style>
 </head>
 <body>
-  <!-- Model Viewer -->
+  <!-- 3D Model Viewer -->
   <model-viewer
     id="viewer"
     src="./scene.glb" 
     alt="A 3D model"
     ar
-    ar-modes="scene-viewer webxr"
+    ar-modes="scene-viewer webxr quick-look"
     environment-image="neutral"
     auto-rotate
     camera-controls
     style="width: 100%; height: 80vh; max-height: 500px;">
   </model-viewer>
 
-  <!-- AR Button Fallback -->
-  <div id="fallback-message">
-    Your device does not support AR mode. You can still rotate, zoom, and interact with the model above.
-  </div>
+  <!-- AR Fallback Button -->
+  <button id="ar-button" style="padding: 10px 20px; margin-top: 10px; font-size: 16px;">Open in AR</button>
+  <div id="fallback-message">Your device does not support AR mode. You can still interact with the 3D model above.</div>
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const viewer = document.getElementById("viewer");
+      const arButton = document.getElementById("ar-button");
       const fallbackMessage = document.getElementById("fallback-message");
 
       // Check if AR is supported
-      if (!viewer.canActivateAR) {
-        // Display fallback message if AR is not supported
+      if (viewer.canActivateAR) {
+        // If AR is supported, use the default AR button from model-viewer
+        arButton.style.display = "none";
+      } else {
+        // If AR is not supported, show fallback message and custom button
         fallbackMessage.style.display = "block";
+        arButton.addEventListener("click", () => {
+          // Open Scene Viewer fallback URL (ensure model.glb is properly hosted)
+          const sceneViewerUrl = `intent://arvr.google.com/scene-viewer/1.0?file=${window.location.origin}/model.glb&mode=ar_only#Intent;scheme=https;package=com.google.android.googlequicksearchbox;end;`;
+          window.location.href = sceneViewerUrl;
+        });
       }
     });
   </script>
