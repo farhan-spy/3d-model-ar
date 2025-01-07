@@ -1,20 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>AR Viewer</title>
-  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  <title>3D Model Viewer</title>
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #fallback-message {
+      display: none;
+      margin-top: 20px;
+      color: #ff0000;
+      font-size: 18px;
+    }
+  </style>
 </head>
-<body style="margin: 0; padding: 0;">
+<body>
+  <!-- Model Viewer -->
   <model-viewer
-    src="./scene.glb"
+    id="viewer"
+    src="./scene.glb" 
     alt="A 3D model"
     ar
     ar-modes="scene-viewer webxr"
     environment-image="neutral"
     auto-rotate
     camera-controls
-    style="width: 100%; height: 100vh;">
+    style="width: 100%; height: 80vh; max-height: 500px;">
   </model-viewer>
+
+  <!-- AR Button Fallback -->
+  <div id="fallback-message">
+    Your device does not support AR mode. You can still rotate, zoom, and interact with the model above.
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const viewer = document.getElementById("viewer");
+      const fallbackMessage = document.getElementById("fallback-message");
+
+      // Check if AR is supported
+      if (!viewer.canActivateAR) {
+        // Display fallback message if AR is not supported
+        fallbackMessage.style.display = "block";
+      }
+    });
+  </script>
 </body>
 </html>
